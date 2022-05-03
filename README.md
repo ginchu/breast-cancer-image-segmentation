@@ -1,4 +1,6 @@
 # breast-cancer-image-segmentation
+Boston College Biomedical Image Analysis Course Spring 2022
+
 
 ## Runnable scripts/commands: what are the main commands that you run to get the results
 For the dataset:
