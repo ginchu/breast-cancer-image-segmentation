@@ -1,5 +1,5 @@
 # breast-cancer-image-segmentation
-Boston College Biomedical Image Analysis Course Spring 2022
+Boston College Biomedical Image Analysis Course Spring 2022: Final Project
 
 
 ## Runnable scripts/commands: what are the main commands that you run to get the results
