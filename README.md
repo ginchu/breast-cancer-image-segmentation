@@ -14,3 +14,4 @@ To Run Model:
 
 ## Contribution: who is responsible for which files
 Gina: train.py, data.py, unet.py
+Ananya: Augmented_data, data_augmentation_code.py
