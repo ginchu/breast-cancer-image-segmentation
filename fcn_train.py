@@ -1,39 +1,4 @@
-import numpy as np
-import sklearn
-from torch.utils.data import DataLoader, Subset
-from sklearn.model_selection import train_test_split
 
-from fcn_data import *
-#from ResNet import *
-from fcn import *
-
-import wandb
-
-wandb.login()
-
-num_epochs = 20
-test_split = 0.3
-batch_size = 8
-SEED = 42
-lr = 0.005
-
-data = FCNDataset()
-
-print(len(data))
-
-# generate indices: instead of the actual data we pass in integers instead
-train_indices, test_indices, _, _ = train_test_split(
-    range(len(data)),
-    data.y,
-    test_size=test_split,
-    random_state=SEED
-)
-
-# generate subset based on indices
-train = Subset(data, train_indices)
-test = Subset(data, test_indices)
-print(len(train))
-print(len(test))
 import numpy as np
 import sklearn
 from torch.utils.data import DataLoader, Subset
