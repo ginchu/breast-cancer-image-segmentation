@@ -13,5 +13,6 @@ To Run Model:
     python3 train.py
 
 ## Contribution: who is responsible for which files
-Gina: train.py, data.py, unet.py
+Gina: train.py, data.py, unet.py, mlp.py, enet.py, aug_data.py
+
 Ananya: Augmented_data, data_augmentation_code.py
