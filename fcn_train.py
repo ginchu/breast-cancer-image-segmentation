@@ -5,7 +5,6 @@ from torch.utils.data import DataLoader, Subset
 from sklearn.model_selection import train_test_split
 
 from fcn_data import *
-#from ResNet import *
 from fcn import *
 
 import wandb
@@ -22,7 +21,7 @@ data = FCNDataset()
 
 print(len(data))
 
-# generate indices: instead of the actual data we pass in integers instead
+# generate indices
 train_indices, test_indices, _, _ = train_test_split(
     range(len(data)),
     data.y,
@@ -30,16 +29,25 @@ train_indices, test_indices, _, _ = train_test_split(
     random_state=SEED
 )
 
-# generate subset based on indices
+
 train = Subset(data, train_indices)
 test = Subset(data, test_indices)
 print(len(train))
 print(len(test))
+
+
+train_generator = DataLoader(train, batch_size=batch_size, shuffle=True)
+test_generator = DataLoader(test, batch_size=batch_size, shuffle=True)
+train_size = len(train)
+test_size = len(test)
+
+
 # MODEL
-#model = model(True)
 model = FCN_res101(4,8)
+
+
 # LOSS
-#criterion = nn.BCELoss()
+
 loss = torch.nn.CrossEntropyLoss()
 
 # OPTIMIZER
