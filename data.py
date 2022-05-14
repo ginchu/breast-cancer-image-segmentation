@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import glob
 import matplotlib.image as mpimg
-class UNetDataset(torch.utils.data.Dataset):
+class Dataset(torch.utils.data.Dataset):
   def __init__(self, train = True):
       self.x = sorted(glob.glob('./TNBC_NucleiSegmentation/Slide_*/*'))
       self.x.remove('./TNBC_NucleiSegmentation/Slide_09/09_2.png')
@@ -16,9 +16,9 @@ class UNetDataset(torch.utils.data.Dataset):
 
 
   def __len__(self):
-    return len(self.x)
+      return len(self.x)
    
   def __getitem__(self, idx):
-    x = np.transpose(mpimg.imread(self.x[idx]),[2,1,0])
-    y = np.transpose(mpimg.imread(self.y[idx]).reshape(512,512,1),[2,1,0])
-    return torch.tensor(x).float(), torch.tensor(y).float()
+      x = np.transpose(mpimg.imread(self.x[idx])[:,:,:3],[2,1,0])
+      y = np.transpose(mpimg.imread(self.y[idx]).reshape(512,512,1),[2,1,0])
+      return torch.tensor(x).float(), torch.tensor(y).float()

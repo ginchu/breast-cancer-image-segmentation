@@ -1,24 +1,39 @@
 import numpy as np
 import torch
+import torch.nn as nn
 from torch.utils.data import DataLoader, Subset
 from sklearn.model_selection import train_test_split
 
 from data import *
+from aug_data import *
 from unet import *
+from mlp import *
+from enet import *
 
 import wandb
 
 wandb.login()
 
-num_epochs = 100
+num_epochs = 200
 test_split = 0.3
 batch_size = 64
 SEED = 42
 lr = 0.005
+dataset = 'aug'
+model_name = 'enet'
 
-data = UNetDataset()
+# MODEL
+if model_name == 'unet':
+    model = UNet(3,1)
+elif model_name == 'mlp':
+    model = MLP(786432, 262144, 1)
+elif model_name == 'enet':
+    model = ENet(1)
 
-print(len(data))
+if dataset == 'aug':
+    data = AugDataset()
+else:
+    data = Dataset()
 
 # generate indices: instead of the actual data we pass in integers instead
 train_indices, test_indices, _, _ = train_test_split(
@@ -40,9 +55,6 @@ test_generator = DataLoader(test, batch_size=batch_size, shuffle=True)
 train_size = len(train)
 test_size = len(test)
 
-# MODEL
-model = UNet(4,1)
-
 # LOSS
 criterion = nn.BCELoss()
 
@@ -55,13 +67,16 @@ config_dict = dict(
     batch_size = batch_size,
     dataset_len = len(data),
     test_split = test_split,
-    lr = lr
+    lr = lr,
+    data = dataset,
+    model = model_name
 )
 wandb.init(project="BIA final", entity="ginac",config=config_dict)
 
 # TRAIN AND TEST LOOP
 tr_loss = []
-val_loss = []
+ts_loss = []
+best = None
 for epoch in range(num_epochs):  # loop over the dataset multiple times
     running_loss = 0.0
     for i, data in enumerate(train_generator, 0):
@@ -70,9 +85,14 @@ for epoch in range(num_epochs):  # loop over the dataset multiple times
         
         # zero the parameter gradients
         optimizer.zero_grad()
+    
 
         # forward + backward + optimize
         outputs = model(inputs)
+
+        if model_name == 'mlp':
+            labels = torch.flatten(labels,1)
+        
         loss = criterion(outputs, labels)
         loss.backward()
         optimizer.step()
@@ -84,17 +104,28 @@ for epoch in range(num_epochs):  # loop over the dataset multiple times
     print("Epoch:", epoch, "\tTrain Loss:", epoch_train_loss)
     wandb.log({'Epoch Num': epoch+1, 'Train loss': epoch_train_loss})
 
-    test_loss = 0.0
-    for i, data in enumerate(test_generator, 0):
-        # get the inputs; data is a list of [inputs, labels]
-        inputs, labels = data
+    if epoch%5 == 0:
+        test_loss = 0.0
+        for i, data in enumerate(test_generator, 0):
+            # get the inputs; data is a list of [inputs, labels]
+            inputs, labels = data
 
-        # forward + backward + optimize
-        outputs = model(inputs)
-        loss = criterion(outputs, labels)
+            # forward + backward + optimize
+            outputs = model(inputs)
+            
+            if model_name == 'mlp':
+                labels = torch.flatten(labels,1)
+            
+            loss = criterion(outputs, labels)
 
-        test_loss += loss.item()
-    epoch_val_loss = test_loss / (test_size//batch_size+1)
-    val_loss.append(epoch_val_loss)
-    print("Test Loss:", epoch_val_loss)
-    wandb.log({'Epoch Num': epoch+1, 'Test loss': epoch_val_loss})
+            test_loss += loss.item()
+        epoch_ts_loss = test_loss / (test_size//batch_size+1)
+        ts_loss.append(epoch_ts_loss)
+
+        if not best:
+            best = epoch_ts_loss
+        if epoch_ts_loss < best:
+            best = epoch_ts_loss
+
+        print("Test Loss:", epoch_ts_loss)
+        wandb.log({'Epoch Num': epoch+1, 'Test loss': epoch_ts_loss, 'Best Test Loss': best})
