@@ -4,7 +4,7 @@ import sklearn
 from torch.utils.data import DataLoader, Subset
 from sklearn.model_selection import train_test_split
 
-from fcn_data import *
+from fcn_data_aug import *
 from fcn import *
 
 import wandb
