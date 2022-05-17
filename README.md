@@ -8,9 +8,19 @@ For the dataset:
     wget https://zenodo.org/record/1175282/files/TNBC_NucleiSegmentation.zip -O dataset.zip
     unzip dataset.zip
     
-To Run Model:
+To Run UNET Model:
     
     python3 train.py
+    
+To Run FCN Model (with original data):
+    
+    python3 fcn_train_no_aug.py
+    
+To Run FCN Model (with augmented data):
+    
+    python3 fcn_train_no_aug.py
+    
+(to run different fcn resnet models, just have to change the model assigned on line '' to any)
 
 ## Contribution: who is responsible for which files
 Gina: train.py, data.py, unet.py, mlp.py, enet.py, aug_data.py
