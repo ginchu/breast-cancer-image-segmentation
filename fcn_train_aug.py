@@ -6,7 +6,6 @@ from sklearn.model_selection import train_test_split
 from fcn_data_aug import *
 from fcn import *
 import wandb
-
 wandb.login()
 
 num_epochs = 20
