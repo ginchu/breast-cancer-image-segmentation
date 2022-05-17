@@ -3,10 +3,8 @@ import numpy as np
 import sklearn
 from torch.utils.data import DataLoader, Subset
 from sklearn.model_selection import train_test_split
-
 from fcn_data_aug import *
 from fcn import *
-
 import wandb
 
 wandb.login()
@@ -29,22 +27,21 @@ train_indices, test_indices, _, _ = train_test_split(
     random_state=SEED
 )
 
-
 train = Subset(data, train_indices)
 test = Subset(data, test_indices)
 print(len(train))
 print(len(test))
-
 
 train_generator = DataLoader(train, batch_size=batch_size, shuffle=True)
 test_generator = DataLoader(test, batch_size=batch_size, shuffle=True)
 train_size = len(train)
 test_size = len(test)
 
-
 # MODEL
 model = FCN_res101(4,8)
-
+#model = FCN_res50(4,8)
+#model = FCN_res34(4,8)
+#model = FCN_res18(4,8)
 
 # LOSS
 
