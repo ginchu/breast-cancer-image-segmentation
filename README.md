@@ -8,7 +8,7 @@ For the dataset:
     wget https://zenodo.org/record/1175282/files/TNBC_NucleiSegmentation.zip -O dataset.zip
     unzip dataset.zip
     
-To Run UNET Model:
+To Run UNET, eNET, or MLP Models:
     
     python3 train.py
     
