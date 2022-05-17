@@ -16,7 +16,6 @@ SEED = 42
 lr = 0.005
 
 data = FCNDataset()
-
 print(len(data))
 
 # generate indices
