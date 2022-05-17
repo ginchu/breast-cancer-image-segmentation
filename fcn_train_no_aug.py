@@ -70,8 +70,12 @@ test = Subset(data, test_indices)
 print(len(train))
 print(len(test))
 # MODEL
-#model = model(True)
+
 model = FCN_res101(4,8)
+#model = FCN_res50(4,8)
+#model = FCN_res34(4,8)
+#model = FCN_res18(4,8)
+
 # LOSS
 #criterion = nn.BCELoss()
 loss = torch.nn.CrossEntropyLoss()
