@@ -36,7 +36,7 @@ Gina:
 
 Ananya:
 - Augmented_data/
-- FCNResults/
+- FCN results/
 - data_augmentation_code.ipynb
 - fcn.py (contains 4 FCN models- resnet101, resnet50, resnet34 and resnet18 backbones)
 - fcn_train_aug.py
