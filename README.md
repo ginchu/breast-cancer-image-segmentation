@@ -20,7 +20,7 @@ To Run FCN Model (with augmented data):
     
     python3 fcn_train_no_aug.py
     
-(to run different fcn resnet models, just have to change the model assigned on line '' to any)
+(to run different fcn resnet models, just have to change the model assigned on line 39, can uncomment the desired model)
 
 ## Contribution: who is responsible for which files
 Gina: train.py, data.py, unet.py, mlp.py, enet.py, aug_data.py
